@@ -1,12 +1,7 @@
 package forwork;
-
-import forreflexio.Reflexio;
-import forsort.SortMetodSelection;
 import org.joda.time.LocalDate;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import org.apache.log4j.Logger;
 
 /**
  * Class for work with other classes =)
@@ -16,13 +11,15 @@ import java.util.Scanner;
  */
 
 public class Main {
+    public static Logger log = Logger.getLogger(Main.class);
     /**
      * main method for all our kingdom
      * @param arg   string with some arguments
      */
     public static void main(String[] arg){
+        log.info("Start main class"+Main.class.getName());
 
-        RepositorArray array = new RepositorArray(new SortMetodSelection());
+        RepositorArray array = new RepositorArray();
 
         Person p1 = new Person(1,"Vlad","man",new LocalDate(1995,11,17));
         Person p2 = new Person(2,"Alex","man",new LocalDate(1997,11,17));
@@ -42,26 +39,8 @@ public class Main {
         array.add(p1);
         array.add(p6);
         array.deletePerson(p2);
-
-        File file = new File("src/main/resources/config.properties");
-        String sortMetodParam = null;
-        String sortFieldParam = null;
-
-
-        try {
-            Scanner sc = new Scanner(file);
-            sortMetodParam = sc.next();
-            sortFieldParam = sc.next();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-
-        Reflexio.setSortMetod(array,sortMetodParam);
-        Reflexio.sortForField(array,sortFieldParam);
-
-        array.println();
+        array.sortFname();
+        //array.println();
     }
 }
 

@@ -1,59 +1,72 @@
 package forreflexio;
 
-import forsort.SortMetod;
-import forwork.RepositorArray;
+import org.apache.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.Properties;
 
 /**
- * Class which realize reflexio
+ * Class for realize reflexio for field
+ * @author Kisa Alexandr
+ * @version 1.0
  */
-public class Reflexio {
+public class Reflexio{
+    private static final Logger log = Logger.getLogger(Reflexio.class);
     /**
-     * Method for sort repositor rep
-     * @param rep   {@link RepositorArray} array for sort
-     * @param sortMetod name sort method
+     * function, which set sorter from config.properties
+     * @param obj   instance of class contains sorter
      */
-    public static void setSortMetod(RepositorArray rep, String sortMetod){
-
-        SortMetod sortClass = null;
-
-        try {
-
-            Class newClass = Class.forName(sortMetod);
-            sortClass = (SortMetod) newClass.newInstance();
-
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
-
+    public void setSortMetod(Object obj){
+        log.info("set field with annotation "+ Injector.class.getName()+ " new value");
+        Properties prop = new Properties();
+        FileInputStream fis;
+        String fileName = "src/main/resources/config.properties";
         try{
-            Field field = rep.getClass().getDeclaredField("sort");
-            field.setAccessible(true);
-            field.set(rep,sortClass);
+            fis = new FileInputStream(fileName);
+            prop.load(fis);
 
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Field[] fields = obj.getClass().getDeclaredFields();
+            for (Field f : fields) {
+                if (f.isAnnotationPresent(Injector.class)){
+                    String fieldName = f.getType().getName();
+                    try {
+                        Class newClass = Class.forName(prop.getProperty(fieldName));
+                        f.setAccessible(true);
+                        f.set(obj,newClass.newInstance());
+
+
+                    } catch (ClassNotFoundException e) {
+                        log.error("class with name " + prop.getProperty(fieldName) + "not found ");
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        log.error("error setAccessible on field "+f.getName());
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        log.error("can't set field " + f.getName());
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+        } catch (FileNotFoundException e) {
+            log.error("can't found file " + fileName);
+            e.printStackTrace();
+        } catch (IOException e) {
+            log.error("can't load file");
             e.printStackTrace();
         }
+
+
     }
 
-    /**
-     * Method for chose field for comparator
-     * @param rep   {@link RepositorArray}
-     * @param sortField field for sort
-     */
-    public static void sortForField(RepositorArray rep, String sortField){
-        try{
-            Method method = rep.getClass().getDeclaredMethod(sortField);
-            method.setAccessible(true);
-            method.invoke(rep);
 
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
 
 
 

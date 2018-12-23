@@ -1,5 +1,6 @@
 package forwork;
 
+import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 
 /**
@@ -9,6 +10,7 @@ import org.joda.time.LocalDate;
  *
  */
 public class Person{
+    private static final Logger log = Logger.getLogger(Person.class);
     /** field identifier */
     private int id;
     /** field ful name */
@@ -29,6 +31,7 @@ public class Person{
      * @param birthday  birthday
      */
     public Person(int id, String fname, String male, LocalDate birthday) {
+        log.debug("create new person woth id "+ id);
         this.id = id;
         this.fname = fname;
         this.male = male;
@@ -42,6 +45,7 @@ public class Person{
      * @param p person with copy parameters
      */
     public Person(Person p) {
+        log.debug("create new person woth id "+ id);
         this.id = p.id;
         this.fname = p.fname;
         this.male = p.male;
@@ -54,6 +58,7 @@ public class Person{
      * @return  id - identifier
      */
     public int getId() {
+        log.debug("get id "+ id);
         return id;
     }
 
@@ -62,6 +67,7 @@ public class Person{
      * @param id  - identifier
      */
     public void setId(int id) {
+        log.debug("set new id "+id);
         this.id = id;
     }
 
@@ -70,6 +76,7 @@ public class Person{
      * @return fname
      */
     public String getFname() {
+        log.debug("get fname " + fname);
         return fname;
     }
 
@@ -78,6 +85,7 @@ public class Person{
      * @param fname - full name
      */
     public void setFio(String fname) {
+        log.debug("set new fname "+fname);
         this.fname = fname;
     }
 
@@ -86,6 +94,7 @@ public class Person{
      * @return male
      */
     public String getMale() {
+        log.debug("get male "+ male);
         return male;
     }
 
@@ -94,6 +103,7 @@ public class Person{
      * @param male
      */
     public void setMale(String male) {
+        log.debug("set new male "+ male);
         this.male = male;
     }
 
@@ -102,6 +112,7 @@ public class Person{
      * @return birthday
      */
     public LocalDate getBirthday() {
+        log.debug("get bithday " + birthday);
         return birthday;
     }
 
@@ -110,6 +121,7 @@ public class Person{
      * @param birthday
      */
     public void setBirthday(LocalDate birthday) {
+        log.debug("set new birthday " + birthday);
         this.birthday = birthday;
     }
 
@@ -118,17 +130,20 @@ public class Person{
      * @return age
      */
     public int getAge() {
+        log.debug("get age ");
 
         LocalDate today = LocalDate.now();
 
         if (today.getYear() > birthday.getYear()) {
             this.age =today.getYear() - birthday.getYear();
-            if(today.getMonthOfYear() > birthday.getMonthOfYear())
+            if(today.getMonthOfYear() < birthday.getMonthOfYear())
                 this.age--;
             else
             if ( today.getMonthOfYear() == birthday.getMonthOfYear() && today.getDayOfMonth() < birthday.getDayOfMonth() )
                 this.age--;
         }
+        else
+            age = 0;
         return age;
     }
 
@@ -136,6 +151,7 @@ public class Person{
      *  Method for write all fields in console
      */
     public void println(){
+        log.debug("print person with id "+id);
         System.out.println(this.id);
         System.out.println(this.fname);
         System.out.println(this.male);
@@ -149,6 +165,7 @@ public class Person{
      * @param p
      */
     public void Copy(Person p) {
+        log.debug("Copy person with id "+p.getId()+" on person with "+this.getId());
         this.id = p.id;
         this.fname = p.fname;
         this.male = p.male;
@@ -163,6 +180,7 @@ public class Person{
      */
     @Override
     public boolean equals(Object o) {
+        log.debug("equal with object "+o.getClass().getName());
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 

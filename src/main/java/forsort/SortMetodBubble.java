@@ -2,6 +2,7 @@ package forsort;
 
 import forwork.Compare;
 import forwork.Person;
+import org.apache.log4j.Logger;
 
 /**
  * Class which implements {@link SortMetod}
@@ -11,7 +12,7 @@ import forwork.Person;
  */
 
 public class SortMetodBubble implements SortMetod {
-
+    private static final Logger log = Logger.getLogger(SortMetodBubble.class);
     /**
      * Eeeeeee, booooy bubble method for sort
      * @param arr   array with elem Person {@link Person}
@@ -21,8 +22,8 @@ public class SortMetodBubble implements SortMetod {
     @Override
     public void sort(Person[] arr, int size, Compare comp) {
 
-        System.out.println('\n'+SortMetodBubble.class.getName()+'\n');
-
+        //System.out.println('\n'+SortMetodBubble.class.getName()+'\n');
+        log.info("sort Repository with Bubble by " + comp.toString());
         for (int i=0; i<size-1;i++){
             for (int j=i+1;j<size;j++)
                 if (comp.CompareTo(arr[i],arr[j]) > 0 ){

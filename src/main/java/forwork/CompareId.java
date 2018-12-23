@@ -1,9 +1,12 @@
 package forwork;
 
+import org.apache.log4j.Logger;
+
 /**
  *  class which implement interface Compare
  */
 public class CompareId implements Compare {
+    private static final Logger log = Logger.getLogger(CompareId.class);
     /**
      * realizes metod for comparation
      * @param p   Person with fields
@@ -12,6 +15,7 @@ public class CompareId implements Compare {
      */
     @Override
     public int CompareTo(Person p, Person value) {
+        log.debug("compare Person1: " + p.getId() + " with Person2:" + value.getId() + " by Id");
         return ( p.getId() > value.getId() ? 1 : (p.getId() ==  value.getId() ?  0 : -1) );
     }
 }
